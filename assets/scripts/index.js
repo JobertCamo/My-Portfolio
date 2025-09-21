@@ -1,4 +1,40 @@
+document.getElementById("contact-form").addEventListener("submit", async function(e) {
+    e.preventDefault(); // stop redirect
+    const form = e.target;
 
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            form.reset(); // clear inputs
+            const successMsg = document.getElementById("form-success");
+            successMsg.classList.remove("hidden");
+
+            // hide after 2 seconds
+            setTimeout(() => {
+                successMsg.classList.add("hidden");
+            }, 2000);
+        } else {
+            document.getElementById("form-success").classList.add("hidden");
+            const errorMsg = document.getElementById("form-error");
+            
+            errorMsg.classList.remove("hidden");
+
+            setTimeout(() => {
+                errorMsg.classList.add("hidden");
+            });
+        }
+    } catch (error) {
+        document.getElementById("form-error").classList.remove("hidden");
+        document.getElementById("form-success").classList.add("hidden");
+    }
+});
 
 
 // 
